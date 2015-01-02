@@ -1,0 +1,5 @@
+[package]
+
+name = "data_structures"
+version = "0.0.1"
+authors = ["Mauricio Linhares <mauricio.linhares@gmail.com>"]
