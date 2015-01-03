@@ -1,36 +1,29 @@
-enum Node<'a, V:'a + PartialOrd> {
-  Cons( V, Box<Node<'a, V>>),
-  Nil,
+struct NodeItem<'a, V:'a + Ord> {
+  value : V,
+  next : Box<Option<NodeItem<'a,V>>>
 }
 
-impl <'a, V:'a + PartialOrd> Node<'a,V> {
+impl <'a, V:'a + Ord> NodeItem<'a,V> {
 
-  fn add(&mut self, element : V) {
+  fn new(value : V) -> NodeItem<'a,V> {
+    NodeItem { value : value, next : box None }
+  }
 
-    match self {
+  fn add(&mut self, value : V) {
 
+    match self.value.cmp(&value) {
+      Less => {
+        self.next = box Some(NodeItem {value: self.value, next : self.next });
+        self.value = value;
+      },
+      Equal | Greater => {
+        match *self.next {
+          Some(ref mut next) => next.add(value),
+          None => self.next = box Some(NodeItem::new(value)),
+        }
+      },
     }
 
-  }
-
-}
-
-pub struct LinkedList<'a, T: 'a + PartialOrd> {
-  head : Node<'a,T>
-}
-
-impl <'a,T : 'a + PartialOrd> LinkedList<'a,T> {
-
-  fn new() -> LinkedList<'a,T> {
-    LinkedList{ head : Node::Nil }
-  }
-
-  fn add(&mut self, element : T) -> &mut LinkedList<'a,T> {
-
-
-
-
-    self
   }
 
 }
